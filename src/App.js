@@ -1,23 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+
+//components
+import AddMovieForm from './components/AddMovieForm';
+import MovieList from './components/MovieList';
 
 function App() {
+  const initialState = [
+    { id: 1, name: 'The Matrix' },
+    { id: 2, name: 'The Dark Knight' },
+    { id: 3, name: 'Ironman' },
+  ];
+
+  const [movieList, setMoviesList] = useState(initialState);
+
+  function handleDelete(id) {
+    setMoviesList((prev) => prev.filter((i) => i.id != id));
+  }
+  function handleMovieAdd(name) {
+    const addmovie = {
+      id: new Date().getTime(),
+      name: name,
+    };
+    const newMovies = [...movieList];
+    newMovies.push(addmovie);
+
+    setMoviesList(newMovies);
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <AddMovieForm onAdd={handleMovieAdd} />
+      <MovieList movies={movieList} onDelete={handleDelete} />
     </div>
   );
 }
